@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Un libro para Sammy Rizitos</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+  min-height:100vh;
+  background: linear-gradient(rgba(0,0,0,64%), rgba(0,0,0,64%)), 
+              url("lirio.jpeg") center/cover no-repeat fixed;
+  font-family:'Playfair Display', serif;
+  overflow:hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  transition: opacity 1s ease;
+}
+
+.start-btn {
+  padding: 20px 50px;
+  font-family: 'Playfair Display', serif;
+  font-size: 24px;
+  color: white;
+  background: #8e7cc3;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 0 20px rgba(142, 124, 195, 0.5);
+  transition: transform 0.3s, background 0.3s;
+}
+
+.start-btn:hover {
+  transform: scale(1.1);
+  background: #a491db;
+}
+
+.snowflake {
+  position: absolute;
+  background-color: #ffffff;
+  border-radius: 50%;
+  opacity: 0.8;
+  pointer-events: none;
+  z-index: 1000;
+  filter: blur(1px);
+  animation: fall linear infinite;
+}
+
+@keyframes fall {
+  0% { transform: translateY(-150px) translateX(0) rotate(0deg); opacity: 0; }
+  20% { opacity: 0.8; }
+  100% { transform: translateY(110vh) translateX(50px) rotate(360deg); opacity: 0; }
+}
+
+.scene{
+  perspective: 2500px;
+  width: 100%;
+  height: 100vh;
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.book{
+  width: 800px;
+  height: 550px;
+  position: relative;
+  transform-style: preserve-3d;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.sheet{
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  right: 0;
+  transform-origin: left center;
+  transition: transform 1.5s cubic-bezier(.645, .045, .355, 1);
+  transform-style: preserve-3d;
+  z-index: 1;
+}
+
+.face{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  padding: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  background: #ffffff;
+  background-image: radial-gradient(circle at left, rgba(0,0,0,0.04) 0%, transparent 15%);
+  box-shadow: inset 0 0 30px rgba(0,0,0,0.05);
+  border: 1px solid rgba(0,0,0,0.05);
+}
+
+.face.back{
+  transform: rotateY(180deg);
+  background-image: radial-gradient(circle at right, rgba(0,0,0,0.04) 0%, transparent 15%);
+}
+
+.sheet.flip{ transform: rotateY(-180deg); }
+
+h1{ font-size: 2.5em; color: #1a1a1a; margin-bottom: 20px; }
+p{ font-size: 1.25em; line-height: 1.8; color: #333; max-width: 90%; }
+.illustration{ width: 180px; margin: 20px 0; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.15)); }
+
+.arrow{
+  position: absolute;
+  bottom: 30px;
+  font-size: 38px;
+  color: #333;
+  cursor: pointer;
+  user-select: none;
+  transition: 0.3s;
+  z-index: 500;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.arrow:hover{ transform: scale(1.3); color: #000; }
+#prev{ left: 20px; display: none; }
+#next{ right: 20px; }
+
+h1 {
+  font-size: 2.5em;
+  color: #1a1a1a;
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 5px rgba(149, 108, 150, 0.644); 
+}
+</style>
+</head>
+<body>
+
+<div id="overlay">
+  <button class="start-btn" onclick="startApp()">Abrir libro 📖</button>
+</div>
+
+<audio id="bgMusic" src="https://raw.githubusercontent.com/fabidz13/Canciones/main/Ben%20E.%20King%20%20Stand%20By%20Me.mp3" preload="auto" loop></audio>
+<audio id="flipSound" src="page.mp3" preload="auto"></audio>
+
+<div class="scene" id="mainScene">
+  <div class="book">
+
+    <div class="sheet" id="s1">
+      <div class="face" style="background-image: url('portada.jpg'); background-size: cover;">
+        <h1 style="background: rgba(255, 255, 255, 0); padding: 15px; border-radius: 5px; font-weight: bold;">Para Sammy</h1>
+        <p style="text-shadow: 2px 2px 5px rgba(255, 255, 255, 0.459); background: rgba(222, 243, 237, 0.61); padding: 15px; border-radius: 5px; font-weight: bold;">Un detalle pequeño hecho<br>con mucho cariño</p>
+      </div>
+      <div class="face back">
+        <img class="illustration" src="puccaygaru.gif" alt="PuccayGaru">
+      </div>
+    </div>
+
+    <div class="sheet" id="s2">
+      <div class="face">
+        <p>Este libro no tiene índice.<br>¿Por qué?</p>
+        <p>Simplemente...<br>No quiero saltarme ninguna página estando contigo.</p>
+    </div>
+      <div class="face back">
+        <p><em>"Algunas historias se leen mejor cuando hace frío."</em></p>
+      </div>
+    </div>
+
+    <div class="sheet" id="s3">
+      <div class="face">
+        <img class="illustration" src="pucca.gif" alt="Pucca">
+        <p>"El amor de Pucca es como un plato de fideos calientes en mitad del invierno, no necesita palabras para entibiar tu alma y sacarte una sonrisa."</p>
+      </div>
+      <div class="face back">
+        <p><em>"Las flores más bellas crecen en el alma."</em></p>
+      </div>
+    </div>
+
+    <div class="sheet" id="s4">
+      <div class="face">
+        <img class="illustration" src="garu.gif" alt="Garu">
+        <p>"El silencio de Garu no es ausencia, es su forma de cuidar lo que más valora.<br>Mi lugar favorito en el mundo es estar a tu lado."</p>
+      </div>
+      <div class="face back">
+        <p><em>"Hay palabras que no buscan prisa, sino lugar."</em></p>
+      </div>
+    </div>
+
+    <div class="sheet" id="s5">
+      <div class="face">
+        <img class="illustration" src="pochaccoenamorado.gif" alt="pochaccoenamorado">
+        <p>"Pochacco sabe que no hace falta dar grandes pasos para llegar muy lejos; basta con caminar despacito, pero siempre en tu misma dirección."</p>
+      </div>
+      <div class="face back">
+        <img class="illustration" src="pochaccojugueton.gif" alt="pochaccojugueton">
+        <p>"Pochacco no corre para llegar primero, sino para llegar a tiempo a tu lado."</p>
+      </div>
+    </div>
+
+    <div class="sheet" id="s6">
+      <div class="face">
+        <p><em>"Porque sabe que la felicidad no es una meta, sino este ratito contigo."</em></p>
+      </div>
+      <div class="face back">
+        <p><em>"Te quiero mucho de manera sincera, me encantas y hago esto como una forma de expresar lo que siento.<br>Realmente espero te fascine"</em></p>
+      </div>
+    </div>
+
+    <div class="sheet" id="s7">
+      <div class="face">
+        <p>Este libro no termina aquí.<br>Solo se queda abierto para ti.</p>
+        <p style="margin-top:25px; font-weight: bold;"><em>Stand By Me</em></p>
+        <p style="margin-top:25px; font-weight: bold;">— Fabian</p>
+      </div>
+      <div class="face back"></div>
+    </div>
+
+    <div class="arrow" id="prev">‹</div>
+    <div class="arrow" id="next">›</div>
+
+  </div>
+</div>
+
+<script>
+function startApp() {
+  const overlay = document.getElementById('overlay');
+  const scene = document.getElementById('mainScene');
+  const music = document.getElementById('bgMusic');
+
+  overlay.style.opacity = '0';
+  setTimeout(() => {
+    overlay.style.display = 'none';
+    scene.style.display = 'flex';
+    music.play().catch(e => console.log("Audio play prevented"));
+  }, 1000);
+}
+
+function createSnowflake() {
+  const snowflake = document.createElement('div');
+  snowflake.classList.add('snowflake');
+  snowflake.style.left = Math.random() * 100 + 'vw';
+  const size = Math.random() * 6 + 4 + 'px';
+  snowflake.style.width = size;
+  snowflake.style.height = size;
+  snowflake.style.animationDuration = Math.random() * 4 + 6 + 's';
+  snowflake.style.opacity = Math.random() * 0.7 + 0.3;
+  document.body.appendChild(snowflake);
+  setTimeout(() => snowflake.remove(), 10000);
+}
+setInterval(createSnowflake, 800);
+
+const sheets = [...document.querySelectorAll(".sheet")];
+const prevBtn = document.getElementById("prev");
+const nextBtn = document.getElementById("next");
+const sound = document.getElementById("flipSound");
+
+let current = 0;
+const totalSheets = sheets.length;
+
+function updateZIndex() {
+  sheets.forEach((sheet, index) => {
+    if (index < current) {
+      sheet.style.zIndex = index + 1;
+    } else {
+      sheet.style.zIndex = totalSheets - index;
+    }
+  });
+}
+
+updateZIndex();
+
+nextBtn.onclick = () => {
+  if (current < totalSheets - 1) {
+    sheets[current].classList.add("flip");
+    current++;
+    updateZIndex();
+    if(sound.src) sound.play().catch(()=>{});
+    prevBtn.style.display = "flex";
+    if (current === totalSheets - 1) nextBtn.style.display = "none";
+  }
+};
+
+prevBtn.onclick = () => {
+  if (current > 0) {
+    current--;
+    sheets[current].classList.remove("flip");
+    updateZIndex();
+    if(sound.src) sound.play().catch(()=>{});
+    nextBtn.style.display = "flex";
+    if (current === 0) prevBtn.style.display = "none";
+  }
+};
+</script>
+
+</body>
+</html>
