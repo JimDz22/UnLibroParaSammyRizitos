@@ -53,6 +53,27 @@ body{
   background: #a491db;
 }
 
+/* Estilo para el botón de Continuación */
+.btn-continuacion {
+  margin-top: 20px;
+  padding: 12px 25px;
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  color: white;
+  background: #8e7cc3;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.btn-continuacion:hover {
+  background: #a491db;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+}
+
 .snowflake {
   position: absolute;
   background-color: #ffffff;
@@ -233,6 +254,8 @@ h1 {
         <p>Este libro no termina aquí.<br>Solo se queda abierto para ti.</p>
         <p style="margin-top:25px; font-weight: bold;"><em>Stand By Me</em></p>
         <p style="margin-top:25px; font-weight: bold;">— Fabian</p>
+        
+        <button class="btn-continuacion" onclick="irAContinuacion()">Continuación</button>
       </div>
       <div class="face back"></div>
     </div>
@@ -244,6 +267,10 @@ h1 {
 </div>
 
 <script>
+function irAContinuacion() {
+  window.location.href = "https://jimdz22.github.io/UnlibritoparaSammy/";
+}
+
 function startApp() {
   const overlay = document.getElementById('overlay');
   const scene = document.getElementById('mainScene');
